@@ -54,9 +54,6 @@ const getDescription = async() => {
 }
 
 getCategories()
-.then(result => {
-  return result
-})
 .then(getProducts)
 .then(() => products)
 .then(getItem)

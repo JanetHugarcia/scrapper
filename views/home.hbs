@@ -1,0 +1,14 @@
+<h1>Products Wong</h1>
+<ul>
+  {{#each products}}
+    <li>
+      <h2>{{this.name}}</h2>
+      <img src={{this.imgSrc}} />
+      <ul>
+        {{#each this.description}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </li>
+  {{/each}}
+</ul>

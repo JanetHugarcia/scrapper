@@ -1,39 +1,26 @@
-const rp = require('request-promise');
-const otcsv = require('objects-to-csv');
-const cheerio = require('cheerio');
-const fs = require('fs');
+const express = require('express');
+const morgan = require('morgan');
+const data = require('./wong/data');
+const exphbs = require('express-handlebars');
 
-const baseURL = 'https://www.yellowpages.com';
-const searchURL = '/search?search_terms=printing&geo_location_terms=New+York%2C+NY';
+//Initial
+const server = express();
 
-const getCompanies = async () => {
-    const html = await rp(baseURL + searchURL);
-    const businessMap = cheerio('a.business-name', html).map(async (i, e) => {
-      const link = baseURL + e.attribs.href;
-      const innerHtml = await rp(link);
-      const emailAddress = cheerio('a.email-business', innerHtml).prop('href');
-      const name = e.children[0].data;
-      const phone = cheerio('p.phone', innerHtml).text();
-  
-      return {
-        emailAddress,
-        link,
-        name,
-        phone,
-      }
-    }).get();
-console
-    return Promise.all(businessMap);
-  };
+server.set('port', 3000);
 
-  getCompanies()
-  .then(result => {
-      fs.writeFile('data.js', JSON.stringify(result), (err) => {
-        console.log(typeof JSON.stringify(result));
-        if (err) throw err;
-        console.log('successful');
-      })
-    const transformed = new otcsv(result);
-    return transformed.toDisk('./output.csv');
-  })
-  .then(() => console.log('SUCCESSFULLY COMPLETED THE WEB SCRAPING SAMPLE'));
+//settings
+server.engine('.hbs', exphbs({extname: '.hbs'}));
+server.set('view engine', '.hbs');
+
+//middlewares
+server.use(morgan('dev'));
+
+//Routes
+server.get('/', (req,res,next) => {
+  res.render('home', { products: data})
+})
+
+//server
+server.listen(server.get('port'), () => {
+  console.log('Server running', server.get('port'));
+})
