@@ -30,18 +30,27 @@ const getProducts = (categories) => {
 const getItem = products => {
   const arr = products.map(async(e,i) => {
     const itemHtml = await rp(e);
-    const imgSrc = cheerio('a.image-zoom', itemHtml)[0].attribs.href;
     const name = cheerio('div.productName', itemHtml)[0].children[0].data;
-    const description = cheerio('div.product-specifications__column', itemHtml)
-    // .map((i,e) => { 
-      console.log(description,'imgSrc')
-      // let obj = {};
-      // obj[`${e.children[0].data}`] = `${e.children[1].data}`;
-      // return obj
-    // })
-    
+    const imgSrc = cheerio('a.image-zoom', itemHtml)[0].attribs.href;
+    const contentDescription = cheerio('div.productDescription', itemHtml) || [];
+    const description = contentDescription && contentDescription[0].children.map((e,i) => {
+      return e.children && e.children[0].data || null
+    });
+    return {
+      name,
+      imgSrc,
+      description : description.length && description || null
+    }
   })
   return Promise.all(arr)
+}
+
+const getDescription = async() => {
+  const itemHtml = await rp('https://www.wong.pe/panasonic-televisor-led-43-tc-43fs500-37445/p');
+  const description = cheerio('div.productDescription', itemHtml)[0].children.map((e,i) => {
+    return e.children[0].data
+  })
+  return description
 }
 
 getCategories()
@@ -51,4 +60,14 @@ getCategories()
 .then(getProducts)
 .then(() => products)
 .then(getItem)
+.then(result => {
+  fs.writeFile('data.js', JSON.stringify(result), (err) => {
+    console.log(typeof JSON.stringify(result));
+    if (err) throw err;
+    console.log('successful');
+    })
+})
 .then(() => console.log('SUCCESSFULLY COMPLETED THE WEB SCRAPING SAMPLE'));
+
+// getDescription()
+// .then((info) => console.log(info,'SUCCESSFULLY COMPLETED THE WEB SCRAPING SAMPLE'));
