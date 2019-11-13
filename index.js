@@ -22,7 +22,7 @@ const getCompanies = async () => {
         phone,
       }
     }).get();
-    console.log(businessMap,'que es')
+console
     return Promise.all(businessMap);
   };
 
