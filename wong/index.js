@@ -31,12 +31,13 @@ const getItem = products => {
   const arr = products.map(async(e,i) => {
     const itemHtml = await rp(e);
     const imgSrc = cheerio('a.image-zoom', itemHtml)[0].attribs.href;
-    const name = cheerio('div.productName', itemHtml)[0].children.data;
-    console.log(name,'imgSrc')
-    // const description = cheerio('div.product-specifications__column', innerHtml).map((i,e) => {
-    //   let obj = {};
-    //   obj[`${e.children[0].data}`] = `${e.children[1].data}`;
-    //   return obj
+    const name = cheerio('div.productName', itemHtml)[0].children[0].data;
+    const description = cheerio('div.product-specifications__column', itemHtml)
+    // .map((i,e) => { 
+      console.log(description,'imgSrc')
+      // let obj = {};
+      // obj[`${e.children[0].data}`] = `${e.children[1].data}`;
+      // return obj
     // })
     
   })
