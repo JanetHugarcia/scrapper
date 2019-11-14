@@ -1,0 +1,76 @@
+@font-face {
+    font-family: "nunito-sans";
+    src: url("../fonts/NunitoSans-Regular.ttf");
+  }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'nunito-sans';
+}
+h1 {
+    margin: 15px 0;
+    text-align: center;
+}
+ul {
+    list-style: none;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.image {
+    width: 100px;
+    margin: 10px 0 15px;
+}
+.card-list {
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: space-around; */
+    /* max-width: 1040px; */
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.card {
+    border: 1px solid #eaeaea;
+    border-radius: 5px;
+    padding: 20px 0 6px;
+    width: 165px;
+    margin-bottom: 10px;
+    margin-right: 6px;
+}
+/* .card:not(:nth-child(7n)) {
+    margin-right: 7px; 
+} */
+.card-title {
+    font-size: 13px;
+    line-height: 16px;
+    margin: 10px 0;
+}
+.thumbnail {
+    text-align: center;
+    padding: 10px;
+}
+.description {
+    text-align: center;
+    padding: 5px 10px 10px;
+}
+.price {
+    display: block;
+}
+.price--list{
+    text-decoration: line-through;
+    color: darkgray;
+}
+.price--best {
+    color: red;
+    font-size: 16px;
+}
+.highlights {
+    font-size: 12px;
+    margin-top: 15px;
+    text-align: left;
+}

@@ -1,10 +1,13 @@
 const rp = require('request-promise');
 const cheerio = require('cheerio');
 const fs = require('fs');
+const path = require('path');
 
 const baseURLcyber = 'https://www.wong.pe/especiales/cyberwong';
 const baseURL = 'https://www.wong.pe';
 let products = [];
+let ListProducts =[];
+const finalPath = path.join(__dirname, '/data.js');
 
 const getCategories= async () => {
   const html = await rp(baseURLcyber);
@@ -24,23 +27,37 @@ const getProducts = (categories) => {
       products.push(productLink);
     }).get();
   })
+  console.log(products,'roduct')
   return Promise.all(arr);
 };
 
 const getItem = products => {
+  // console.log(products,'prodcust')
   const arr = products.map(async(e,i) => {
+    // console.log(e,'item')
     const itemHtml = await rp(e);
     const name = cheerio('div.productName', itemHtml)[0].children[0].data;
+    // console.log(name,'name')
     const imgSrc = cheerio('a.image-zoom', itemHtml)[0].attribs.href;
+    // console.log(imgSrc,'imgSrc');
     const contentDescription = cheerio('div.productDescription', itemHtml) || [];
     const description = contentDescription && contentDescription[0].children.map((e,i) => {
       return e.children && e.children[0].data || null
     });
-    return {
+    // console.log(description,'description')
+    const priceList = cheerio('strong.skuListPrice', itemHtml)[0].children[0].data;
+    // console.log(priceList, 'priceList')
+    const priceBest = cheerio('strong.skuBestPrice', itemHtml)[0].children[0].data;
+    // console.log(priceBest, 'priceBest')
+    let objResult = {
       name,
       imgSrc,
+      priceList,
+      priceBest,
       description : description.length && description || null
-    }
+    };
+    ListProducts.push(objResult);
+    // return objResult;
   })
   return Promise.all(arr)
 }
@@ -53,18 +70,29 @@ const getDescription = async() => {
   return description
 }
 
+const writeFileJs = (data) => {
+  let template = `
+    const data = ${JSON.stringify(data)};
+    module.exports = data;
+  `;
+  fs.writeFile(finalPath, template, (err) => {
+    console.log(template);
+    if (err) throw err;
+    console.log('successful');
+    })
+}
+
 getCategories()
 .then(getProducts)
 .then(() => products)
 .then(getItem)
-.then(result => {
-  fs.writeFile('data.js', JSON.stringify(result), (err) => {
-    console.log(typeof JSON.stringify(result));
-    if (err) throw err;
-    console.log('successful');
-    })
+.then(() => ListProducts)
+.then(writeFileJs)
+.then((products) => console.log(products,'SUCCESSFULLY COMPLETED THE WEB SCRAPING SAMPLE'))
+.catch((err) => {
+  console.log(err,ListProducts),
+  writeFileJs(ListProducts)
 })
-.then(() => console.log('SUCCESSFULLY COMPLETED THE WEB SCRAPING SAMPLE'));
 
 // getDescription()
 // .then((info) => console.log(info,'SUCCESSFULLY COMPLETED THE WEB SCRAPING SAMPLE'));

@@ -1,14 +1,22 @@
 <h1>Products Wong</h1>
-<ul>
+<ul class="card-list">
   {{#each products}}
-    <li>
-      <h2>{{this.name}}</h2>
-      <img src={{this.imgSrc}} />
-      <ul>
-        {{#each this.description}}
-          <li>{{this}}</li>
-        {{/each}}
-      </ul>
+    <li class="card">
+      <div class="content">
+        <div class="thumbnail">
+          <img class="image" src={{this.imgSrc}} />
+          <h2 class="card-title">{{this.name}}</h2>
+        </div>
+        <div class="description">
+          <strong class="price price--list">{{this.priceList}}</strong>
+          <strong class="price price--best">{{this.priceBest}}</strong>
+          <ul class="highlights">
+            {{#each this.description}}
+              <li>{{this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
     </li>
   {{/each}}
 </ul>

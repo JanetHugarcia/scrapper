@@ -14,11 +14,12 @@ const getCompanies = async () => {
   const emailAddress = cheerio('a.email-business', innerHtml).prop('href');
   const name = e.children[0].data;
   const phone = cheerio('p.phone', innerHtml).text();
+  
     return {
       emailAddress,
       link,
       name,
-      phone,
+      phone
     }
   }).get();
   return Promise.all(businessMap);

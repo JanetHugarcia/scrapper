@@ -1,11 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
-const data = require('./wong/data');
+const dataWong = require('./wong/data');
 const exphbs = require('express-handlebars');
+const path = require('path');
 
 //Initial
 const server = express();
-
+const publicPath = path.join(__dirname, '/views');
+console.log(publicPath);
 server.set('port', 3000);
 
 //settings
@@ -14,10 +16,12 @@ server.set('view engine', '.hbs');
 
 //middlewares
 server.use(morgan('dev'));
+server.use('/', express.static(publicPath));
+
 
 //Routes
-server.get('/', (req,res,next) => {
-  res.render('home', { products: data})
+server.get('/wong', (req,res,next) => {
+  res.render('home', { products: dataWong })
 })
 
 //server
