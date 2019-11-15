@@ -1,11 +1,16 @@
-### Scrapping Web
+# Scrapping Web
 ## Wong
-- Scrapping con Nodejs
-    - Paquetes npm :
-    1. rp
-    2. cheerio
-    3. fs
-    4. path
+### Scrapping con Nodejs
+1. request-promise : paquete npm para los request a la página
+2. cheerio: paquete npm que trabaja como un jquery para la búsqueda de elementos
+3. fs: modulo de node para crear archivos.
+4. path: paquete npm para trabajar las rutas en el directorio del proyecto.
+### Mostrar data en un servidor local
+1. Express
+2. Morgan
+3. Express-handlebars
+4. path
+
 - La data de los productos es un array de objetos con la siguiente estructura
     ```js
     const producto = {
